@@ -6,5 +6,6 @@ ncbi::sra-human-scrubber
 * ### For user simplicity this repo is release-only, so that the human scrubber db, binary aligns_to, and  necessary scripts are downloaded as a gzipped tar file
 ### Quick start guide
 * ### Download release
-* ### tar -zxvf {release-tar.gz}
-* ### In the directory where tar was unpacked ./scripts/scrub.sh {path-to-file/fastq-filename}
+* ### tar -zxvf {release.tar.gz}
+* ### In the directory where {release.tar.gz} was unpacked `./scripts/scrub.sh test` Output should be "test succeeded"
+* ### To clean your fastq file, in the directoty where {release.tar.gz} was unpacked `./scripts/scrub.sh {path-to/filename.fastq}`  
