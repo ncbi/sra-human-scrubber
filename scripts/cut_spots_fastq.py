@@ -51,7 +51,7 @@ def main():
             save_removed = True
         if "-n" in sys.argv:
             n_replace = True
-    if (save_removed):
+    if save_removed:
         f_removed_spots = sys.argv[1] + ".removed_spots"
 
     spots = load_spots()
@@ -77,5 +77,7 @@ def main():
             print(quality_scores)
 
         spot_id += 1
+
+    print(len(spots), " spot(s) removed.", file=sys.stderr)
 
 main()
