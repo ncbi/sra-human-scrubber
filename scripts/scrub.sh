@@ -1,10 +1,35 @@
 #!/bin/bash
 set -eu
 
+OPTS=""
+# now offer -h for usage, -n for NN, -r for saving identified spots
+
+usage() {
+    printf "Usage: scrub.sh [OPTIONS] file.fastq\n"
+    printf "OPTIONS:\n"
+    printf "\t-n ; Replace sequence length of identified spots with 'N'\n"
+    printf "\t-r ; Save identified spots to file.fastq.spots_removed\n"
+    printf "\t-h ; Display this message\n\n"
+    exit 0;
+}
+[ $# -eq 0 ] || [ "${1}" == "-h" ] && usage
+while getopts "hnr" opts; do
+    case $opts in
+        n) OPTS+=" -n "
+            ;;
+        r) OPTS+=" -r "
+            ;;
+        h) usage
+           exit 0
+            ;;
+    esac
+done
+shift $((OPTIND-1))
 fastq="$1"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"  >/dev/null 2>&1 && pwd  )"
 ROOT=$(dirname $DIR)
 DB=$ROOT/data/human_filter.db
+
 if [ "$1" == "test" ] && [ -e "$ROOT/test/scrubber_test.fastq" ];
   then
     TMP_DIR=$(mktemp -d)
@@ -12,7 +37,7 @@ if [ "$1" == "test" ] && [ -e "$ROOT/test/scrubber_test.fastq" ];
     fastq=$TMP_DIR/scrubber_test.fastq
 fi
 python "$ROOT/scripts/fastq_to_fasta.py" < "$fastq" > "$fastq.fasta"
-${ROOT}/bin/aligns_to -db "$ROOT/data/human_filter.db" "$fastq.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$fastq" > "$fastq.clean"
+${ROOT}/bin/aligns_to -db "$ROOT/data/human_filter.db" "$fastq.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$fastq" ${OPTS} > "$fastq.clean"
 if [ "$1" == "test" ];
   then
     if [ -e "$TMP_DIR/scrubber_test.fastq.clean" ] &&
