@@ -52,7 +52,4 @@ if [ "$1" == "test" ];
 else
   rm -f "$fastq.fasta"
 fi
-
-
-
-
+exit 0
