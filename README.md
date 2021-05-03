@@ -1,13 +1,13 @@
 ## ncbi::sra-human-scrubber 
 ### Description
-A tool based on STAT ([manuscript in submission](https://biorxiv.org/cgi/content/short/2021.02.16.431451v1)) that will take as input a fastq file, and produce as output a fastq.clean file in which all reads identified as potentially of human origin are removed.
-
+The human read removal tool (HRRT) is based on the SRA Taxonomy Analysis Tool ([manuscript in submission](https://biorxiv.org/cgi/content/short/2021.02.16.431451v2)) that will take as input a fastq file, and produce as output a fastq.clean file in which all reads identified as potentially of human origin are removed.
+### Overview
+Briefly, the HRRT is based on a k-mer database that is constructed from the k-mers derived from all human RefSeq records and subtracts the library of k-mers generated from all non-Eukaryota RefSeq records. The remaining set of k-mers are the database used to ID human reads by the removal tool. This means it tends to be aggressive about identifying human reads since it contains not only human-specific k-mers, but also k-mers common to primates, mammals, and other lineages further up the Eukaryotic tree. However, it is also fairly conservative at maintaining any viral or bacterial clinical pathogen sequences. It takes a fastq file as input, removes any reads with hits to the 'human' k-mer database and outputs a fastq.clean with the identified human reads removed. 
 ### Quick Start
-* For user simplicity this repo is release only, so that the human scrubber db, binary aligns_to, and necessary scripts are downloaded as a gzipped tar file.
-* Create directory `scrubber`
-* `pushd` or `cd` to directory `scrubber`
-* Download {release.tar.gz}
-* tar -zxvf {release.tar.gz}
+* Clone the repo to directory `scrubber`.
+* `pushd` or `cd` to directory `scrubber`.
+* Execute `./init_db.sh` in directory `scrubber` - this will retrieve the pre-built db from ftp and place it in the directory `scubber/data` where it needs to be located.
+
 
 
 ### Usage
@@ -17,14 +17,14 @@ Here the command is simply given the (file) argument `test`
 `./scripts/scrub.sh test`
 
 ```
-2021-02-22 16:14:37 aligns_to version 0.55  
-2021-02-22 16:14:37 hardware threads: 1, omp threads: 1  
-2021-02-22 16:14:39 loading time (sec) 1
-2021-02-22 16:14:39 /tmp/tmp.jPhmylO4q8/scrubber_test.fastq.fasta  
-2021-02-22 16:14:39 100% processed  
-2021-02-22 16:14:39 total spot count: 2  
-2021-02-22 16:14:39 total read count: 2 
-2021-02-22 16:14:39 total time (sec) 1 
+2021-03-29 12:31:48	aligns_to version 0.60
+2021-03-29 12:31:48	hardware threads: 1, omp threads: 1
+2021-03-29 12:31:50	loading time (sec) 1
+2021-03-29 12:31:50	/tmp/tmp.lzwaZO4fwI/scrubber_test.fastq.fasta
+2021-03-29 12:31:50	100% processed
+2021-03-29 12:31:50	total spot count: 2
+2021-03-29 12:31:50	total read count: 2
+2021-03-29 12:31:50	total time (sec) 1
 
 test succeeded
 ```
@@ -38,15 +38,21 @@ Example:
 `./scripts/scrub.sh Runs/SRR13402847.fastq`
 
 ```
-2021-02-22 16:17:03 aligns_to version 0.55
-2021-02-22 16:17:03 hardware threads: 1, omp threads: 1
-2021-02-22 16:17:04 loading time (sec) 1
-2021-02-22 16:17:04 SCRUBBER/Runs/SRR13402847.fastq.fasta
-2021-02-22 16:17:04 15% processed
-2021-02-22 16:17:26 100% processed
-2021-02-22 16:17:47 total spot count: 216859
-2021-02-22 16:17:47 total read count: 216859
-2021-02-22 16:17:47 total time (sec) 44
+2021-03-29 12:33:49	aligns_to version 0.60
+2021-03-29 12:33:49	hardware threads: 1, omp threads: 1
+2021-03-29 12:33:49	loading time (sec) 0
+2021-03-29 12:33:49	Runs/SRR13402847.fastq.fasta
+2021-03-29 12:33:49	15% processed
+2021-03-29 12:33:56	30% processed
+2021-03-29 12:34:02	46% processed
+2021-03-29 12:34:08	62% processed
+2021-03-29 12:34:14	77% processed
+2021-03-29 12:34:20	93% processed
+2021-03-29 12:34:26	100% processed
+2021-03-29 12:34:29	total spot count: 216859
+2021-03-29 12:34:29	total read count: 216859
+2021-03-29 12:34:29	total time (sec) 39
+
 ```
 
 ```
@@ -55,3 +61,17 @@ total 275816
  rw-rr- 1 xxx xxx 141280412 Feb 19 00:03 SRR13402847.fastq
  rw-rr- 1 xxx xxx 141151371 Feb 22 17:06 SRR13402847.fastq.clean
 ```
+Note the application scales to use all threads available
+
+```
+2021-03-29 08:39:07	aligns_to version 0.60
+2021-03-29 08:39:07	hardware threads: 32, omp threads: 32
+2021-03-29 08:39:10	loading time (sec) 2
+2021-03-29 08:39:10	/home/kskatz/SCRUBBER/Runs/SRR13402847.fastq.fasta
+2021-03-29 08:39:10	15% processed
+2021-03-29 08:39:15	100% processed
+2021-03-29 08:39:15	total spot count: 216859
+2021-03-29 08:39:15	total read count: 216859
+2021-03-29 08:39:15	total time (sec) 8
+```
+Docker container available here: https://hub.docker.com/r/ncbi/sra-human-scrubber
