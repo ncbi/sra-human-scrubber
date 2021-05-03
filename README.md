@@ -7,6 +7,7 @@ Briefly, the HRRT is based on a k-mer database that is constructed from the k-me
 * Clone the repo to directory `scrubber`.
 * `pushd` or `cd` to directory `scrubber`.
 * Execute `./init_db.sh` in directory `scrubber` - this will retrieve the pre-built db from ftp and place it in the directory `scubber/data` where it needs to be located.
+* Please note binary `aligns_to`in bin was compiled on x86_64 GNU/Linux. 
 
 
 
