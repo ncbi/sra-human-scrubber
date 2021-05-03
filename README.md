@@ -4,15 +4,15 @@ The human read removal tool (HRRT) is based on the SRA Taxonomy Analysis Tool ([
 ### Overview
 Briefly, the HRRT is based on a k-mer database that is constructed from the k-mers derived from all human RefSeq records and subtracts the library of k-mers generated from all non-Eukaryota RefSeq records. The remaining set of k-mers are the database used to ID human reads by the removal tool. This means it tends to be aggressive about identifying human reads since it contains not only human-specific k-mers, but also k-mers common to primates, mammals, and other lineages further up the Eukaryotic tree. However, it is also fairly conservative at maintaining any viral or bacterial clinical pathogen sequences. It takes a fastq file as input, removes any reads with hits to the 'human' k-mer database and outputs a fastq.clean with the identified human reads removed. 
 ### Quick Start
-* Clone the repo to directory `scrubber`.
-* `pushd` or `cd` to directory `scrubber`.
-* Execute `./init_db.sh` in directory `scrubber` - this will retrieve the pre-built db from ftp and place it in the directory `scubber/data` where it needs to be located.
+* Clone the repo.
+* `pushd` or `cd` to directory `sra-human-scrubber`.
+* Execute `./init_db.sh` in directory `sra-human-scrubber` - this will retrieve the pre-built db from ftp and place it in the directory `sra-human-scrubber/data` where it needs to be located.
 * Please note binary `aligns_to`in bin was compiled on x86_64 GNU/Linux. 
 
 
 
 ### Usage
-Working in the directory `scrubber`
+Working in the directory `sra-human-scrubber`
 #### Invoke the test 
 Here the command is simply given the (file) argument `test`
 `./scripts/scrub.sh test`
