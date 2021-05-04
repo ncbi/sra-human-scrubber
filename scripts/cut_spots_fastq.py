@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import fastq_to_fasta
 
 
 def read_fastq(f):
@@ -51,12 +50,14 @@ def main():
             save_removed = True
         if "-n" in sys.argv:
             n_replace = True
+    f_removed_spots = None
     if save_removed:
         f_removed_spots = sys.argv[1] + ".removed_spots"
 
     spots = load_spots()
+    frs = None
     if len(spots) and save_removed:
-        frs = open (f_removed_spots, "w")
+        frs = open(f_removed_spots, "w")
 
     spot_id = 1
     for desc, seq, plus_line, quality_scores in read_fastq(f):
@@ -79,5 +80,6 @@ def main():
         spot_id += 1
 
     print(len(spots), " spot(s) removed.", file=sys.stderr)
+
 
 main()
