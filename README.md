@@ -27,6 +27,7 @@ Here the command is simply given the (file) argument `test`
 2021-03-29 12:31:50	total spot count: 2
 2021-03-29 12:31:50	total read count: 2
 2021-03-29 12:31:50	total time (sec) 1
+1  spot(s) removed.
 
 test succeeded
 ```
@@ -54,6 +55,7 @@ Example:
 2021-03-29 12:34:29	total spot count: 216859
 2021-03-29 12:34:29	total read count: 216859
 2021-03-29 12:34:29	total time (sec) 39
+139  spot(s) removed.
 
 ```
 
@@ -75,5 +77,6 @@ Note the application scales to use all threads available
 2021-03-29 08:39:15	total spot count: 216859
 2021-03-29 08:39:15	total read count: 216859
 2021-03-29 08:39:15	total time (sec) 8
+139  spot(s) removed.
 ```
 Docker container available here: https://hub.docker.com/r/ncbi/sra-human-scrubber
