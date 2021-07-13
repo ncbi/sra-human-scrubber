@@ -53,7 +53,7 @@ def main():
             n_replace = True
         if "-z" in sys.argv:
             is_gzipped = True
-    f = gzip.open(sys.argv[1]) if is_gzipped else open(sys.argv[1])
+    f = gzip.open(sys.argv[1], 'rt') if is_gzipped else open(sys.argv[1])
     f_removed_spots = None
     if save_removed:
         f_removed_spots = sys.argv[1] + ".removed_spots"
