@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import gzip
 
 
 def read_fastq(f):
@@ -42,14 +43,17 @@ def main():
     if len(sys.argv) < 2:
         print("need <collated fastq to edit>", file=sys.stderr)
         return
-    f = open(sys.argv[1])
     save_removed = False
     n_replace = False
+    is_gzipped = False
     if len(sys.argv) >= 3:
         if "-r" in sys.argv:
             save_removed = True
         if "-n" in sys.argv:
             n_replace = True
+        if "-z" in sys.argv:
+            is_gzipped = True
+    f = gzip.open(sys.argv[1]) if is_gzipped else open(sys.argv[1])
     f_removed_spots = None
     if save_removed:
         f_removed_spots = sys.argv[1] + ".removed_spots"

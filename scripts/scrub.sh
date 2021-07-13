@@ -2,6 +2,7 @@
 set -eu
 
 OPTS=""
+GZIP=""
 # now offer -h for usage, -n for NN, -r for saving identified spots
 
 usage() {
@@ -9,6 +10,7 @@ usage() {
     printf "OPTIONS:\n"
     printf "\t-n ; Replace sequence length of identified spots with 'N'\n"
     printf "\t-r ; Save identified spots to file.fastq.spots_removed\n"
+    printf "\t-z ; Input FASTQ is compressed with GZip\n"
     printf "\t-h ; Display this message\n\n"
     exit 0;
 }
@@ -18,6 +20,8 @@ while getopts "hnr" opts; do
         n) OPTS+=" -n "
             ;;
         r) OPTS+=" -r "
+            ;;
+        z) OPTS+=" -z " ; GZIP="1"
             ;;
         h) usage
            exit 0
@@ -35,10 +39,22 @@ if [ "$1" == "test" ] && [ -e "$ROOT/test/scrubber_test.fastq" ];
     TMP_DIR=$(mktemp -d)
     cp "$ROOT"/test/* "$TMP_DIR/"
     fastq=$TMP_DIR/scrubber_test.fastq
+elif [ "$1" == "test_gz" ] && [ -e "$ROOT/test/scrubber_test.fastq.gz" ];
+  then
+    TMP_DIR=$(mktemp -d)
+    cp "$ROOT"/test/* "$TMP_DIR/"
+    fastq=$TMP_DIR/scrubber_test.fastq.gz
+    GZIP="1"
+    OPTS+=" -z "
 fi
-python "$ROOT/scripts/fastq_to_fasta.py" < "$fastq" > "$fastq.fasta"
+
+if [ "${GZIP}" == "1" ]; then 
+  zcat $fastq | python "$ROOT/scripts/fastq_to_fasta.py" > "$fastq.fasta"
+else
+  python "$ROOT/scripts/fastq_to_fasta.py" < "$fastq" > "$fastq.fasta"
+fi
 ${ROOT}/bin/aligns_to -db "$ROOT/data/human_filter.db" "$fastq.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$fastq" ${OPTS} > "$fastq.clean"
-if [ "$1" == "test" ];
+if [ "$1" == "test" ] ||  [ "$1" == "test_gz" ] ;
   then
     if [ -e "$TMP_DIR/scrubber_test.fastq.clean" ] &&
      [ -n "$(diff "$TMP_DIR/scrubber_test.fastq.clean" "$TMP_DIR/scrubber_expected_output.fastq")" ]
