@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -eux
 
 OPTS=""
 GZIP=""
@@ -15,7 +15,7 @@ usage() {
     exit 0;
 }
 [ $# -eq 0 ] || [ "${1}" == "-h" ] && usage
-while getopts "hnr" opts; do
+while getopts "hnrz" opts; do
     case $opts in
         n) OPTS+=" -n "
             ;;
@@ -67,5 +67,9 @@ if [ "$1" == "test" ] ||  [ "$1" == "test_gz" ] ;
     rm -rf "$TMP_DIR"
 else
   rm -f "$fastq.fasta"
+  if [ "${GZIP}" == "1" ]; then
+    final_name="${fastq%.*}"
+    gzip -c "$fastq.clean" > "${final_name}.clean.gz"
+  fi
 fi
 exit 0
