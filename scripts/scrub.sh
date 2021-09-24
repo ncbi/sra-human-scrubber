@@ -1,44 +1,78 @@
 #!/bin/bash
 set -eu
 
-OPTS=""
-# now offer -h for usage, -n for NN, -r for saving identified spots
-
+#Usage help
 usage() {
-    printf "Usage: scrub.sh [OPTIONS] file.fastq\n"
+    printf "Usage: scrub.sh [OPTIONS]\n"
     printf "OPTIONS:\n"
+    printf "\t-i <input_path>; Input Fastq File\n"
+    printf "\t-o <output_path>; Save cleaned sequence reads to file.\n"
+    printf "\t-d <database_path>; Specify path to custom database.\n"
     printf "\t-n ; Replace sequence length of identified spots with 'N'\n"
     printf "\t-r ; Save identified spots to file.fastq.spots_removed\n"
     printf "\t-h ; Display this message\n\n"
     exit 0;
 }
-[ $# -eq 0 ] || [ "${1}" == "-h" ] && usage
-while getopts "hnr" opts; do
-    case $opts in
-        n) OPTS+=" -n "
-            ;;
-        r) OPTS+=" -r "
-            ;;
-        h) usage
-           exit 0
-            ;;
-    esac
-done
-shift $((OPTIND-1))
-fastq="$1"
+
+#Initalize vars
+INFILE=
+OUTFILE=
+REPLACEN=
+SAVEIDSPOTS=
+RUNTEST=false
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"  >/dev/null 2>&1 && pwd  )"
 ROOT=$(dirname $DIR)
 DB=$ROOT/data/human_filter.db
 
-if [ "$1" == "test" ] && [ -e "$ROOT/test/scrubber_test.fastq" ];
+#Get input
+while getopts ":i:o:d:nrt" opts; do
+    case $opts in
+        i) INFILE=${OPTARG}
+            ;;
+        o) OUTFILE=${OPTARG}
+            ;;
+        d) DB=${OPTARG}
+            ;;
+        n) REPLACEN=" -n "
+            ;;
+        r) SAVEIDSPOTS=" -r "
+            ;;
+        t) RUNTEST=true
+            ;;
+        ?) usage
+            ;;
+    esac
+done
+
+#Check for empty stdin and no args
+[ -t 0 ] && [ $OPTIND -eq 1  ] && usage
+
+#TESTING create temp dir and set infile
+if $RUNTEST && [ -e "$ROOT/test/scrubber_test.fastq" ];
   then
     TMP_DIR=$(mktemp -d)
     cp "$ROOT"/test/* "$TMP_DIR/"
-    fastq=$TMP_DIR/scrubber_test.fastq
+    INFILE=$TMP_DIR/scrubber_test.fastq
 fi
-python "$ROOT/scripts/fastq_to_fasta.py" < "$fastq" > "$fastq.fasta"
-${ROOT}/bin/aligns_to -db "$ROOT/data/human_filter.db" "$fastq.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$fastq" ${OPTS} > "$fastq.clean"
-if [ "$1" == "test" ];
+
+#Convert to FASTA, create temp fastq if reading from stdin
+if [ -t 0 ];
+  then
+    python "$ROOT/scripts/fastq_to_fasta.py" < "${INFILE}" > "temp.fasta"
+  else
+    tee "temp.fastq" | python "$ROOT/scripts/fastq_to_fasta.py" > "temp.fasta"
+fi
+
+#Use infile or temp fastq and either send output to stdout or specified fasta
+if [ $OUTFILE ];
+  then
+    ${ROOT}/bin/aligns_to -db "${DB}" "temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" $(if [ $INFILE ]; then echo "${INFILE}";else echo "temp.fastq";fi) $REPLACEN $SAVEIDSPOTS > $OUTFILE
+  else
+    ${ROOT}/bin/aligns_to -db "${DB}" "temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" $(if [ $INFILE ]; then echo "${INFILE}";else echo "temp.fastq";fi) $REPLACEN $SAVEIDSPOTS
+fi
+
+#Check if TESTING was successful
+if $RUNTEST;
   then
     if [ -e "$TMP_DIR/scrubber_test.fastq.clean" ] &&
      [ -n "$(diff "$TMP_DIR/scrubber_test.fastq.clean" "$TMP_DIR/scrubber_expected_output.fastq")" ]
@@ -49,7 +83,9 @@ if [ "$1" == "test" ];
     fi
     printf "\ntest succeeded\n\n"
     rm -rf "$TMP_DIR"
-else
-  rm -f "$fastq.fasta"
 fi
+
+#Clean up temp files
+rm -f "temp.fasta"
+rm -f "temp.fastq"
 exit 0
