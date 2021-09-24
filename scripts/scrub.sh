@@ -7,7 +7,7 @@ usage() {
     printf "OPTIONS:\n"
     printf "\t-i <input_path>; Input Fastq File\n"
     printf "\t-o <output_path>; Save cleaned sequence reads to file.\n"
-    printf "\t-d <database_path>; Specify path to custom database.\n"
+    printf "\t-d <database_path>; Specify path to custom database file (e.g. human_filter.db).\n"
     printf "\t-n ; Replace sequence length of identified spots with 'N'\n"
     printf "\t-r ; Save identified spots to file.fastq.spots_removed\n"
     printf "\t-h ; Display this message\n\n"
