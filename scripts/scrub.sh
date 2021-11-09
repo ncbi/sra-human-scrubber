@@ -108,6 +108,8 @@ if $RUNTEST;
 fi
 
 #Clean up temp files
-rm -f "temp.fasta"
-rm -f "temp.fastq"
+if [ -e "$TMP_F_DIR" ];
+    then
+    rm -rf "$TMP_F_DIR"
+fi
 exit 0
