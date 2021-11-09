@@ -26,7 +26,7 @@ ROOT=$(dirname $DIR)
 DB=$ROOT/data/human_filter.db
 
 #Get input
-while getopts ":i:o:d:nrt" opts; do
+while getopts ":i:o:d:hnrt" opts; do
     case $opts in
         i) INFILE=${OPTARG}
             ;;
