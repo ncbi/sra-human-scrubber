@@ -3,10 +3,11 @@ set -eu
 
 #Usage help
 usage() {
-    printf "Usage: scrub.sh [OPTIONS]\n"
+    printf "Usage: scrub.sh [OPTIONS] [file.fastq] \n"
     printf "OPTIONS:\n"
-    printf "\t-i <input_path>; Input Fastq File\n"
-    printf "\t-o <output_path>; Save cleaned sequence reads to file.\n"
+    printf "\t-i <input_file>; Input Fastq File\n"
+    printf "\t-o <output_file>; Save cleaned sequence reads to file, or set to "-" for stdout.\n"
+    printf "\t\tNOTE: When stdin is used, output is stdout by default.\n"
     printf "\t-d <database_path>; Specify path to custom database file (e.g. human_filter.db).\n"
     printf "\t-n ; Replace sequence length of identified spots with 'N'\n"
     printf "\t-r ; Save identified spots to file.fastq.spots_removed\n"
