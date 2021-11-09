@@ -40,13 +40,23 @@ while getopts ":i:o:d:hnrt" opts; do
             ;;
         t) RUNTEST=true
             ;;
-        ?) usage
+        h | *) usage
             ;;
     esac
 done
 
-#Check for empty stdin and no args
-[ -t 0 ] && [ $OPTIND -eq 1  ] && usage
+#Check for empty stdin and no args 
+[ -t 0 ] && [ $# == 0 ] && usage
+
+if [ ! -e "${INFILE}" ] && [ -t 0 ] && [ -e "${@:$#}" ];
+  then
+    INFILE="${@:$#}"
+fi
+
+if [ "$INFILE" == "test" ];
+   then
+     RUNTEST=true
+fi
 
 #TESTING create temp dir and set infile
 if $RUNTEST && [ -e "$ROOT/test/scrubber_test.fastq" ];
