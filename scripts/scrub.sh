@@ -66,20 +66,31 @@ if $RUNTEST && [ -e "$ROOT/test/scrubber_test.fastq" ];
     INFILE=$TMP_DIR/scrubber_test.fastq
 fi
 
+if [ ! "${OUTFILE}" ] && [ -t 0 ]; 
+   then 
+     OUTFILE="$INFILE.clean" 
+fi    
+
 #Convert to FASTA, create temp fastq if reading from stdin
+TMP_F_DIR=$(mktemp -d)
 if [ -t 0 ];
   then
-    python "$ROOT/scripts/fastq_to_fasta.py" < "${INFILE}" > "temp.fasta"
-  else
-    tee "temp.fastq" | python "$ROOT/scripts/fastq_to_fasta.py" > "temp.fasta"
+    python "$ROOT/scripts/fastq_to_fasta.py" < "${INFILE}" > "$TMP_F_DIR/temp.fasta"
+elif [ ! -t 0 ];
+  then
+    tee "$TMP_F_DIR/temp.fastq" | python "$ROOT/scripts/fastq_to_fasta.py" > "$TMP_F_DIR/temp.fasta"
 fi
 
 #Use infile or temp fastq and either send output to stdout or specified fasta
-if [ $OUTFILE ];
+if [ "$OUTFILE" ] && [ "$OUTFILE" != "-" ];
   then
-    ${ROOT}/bin/aligns_to -db "${DB}" "temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" $(if [ $INFILE ]; then echo "${INFILE}";else echo "temp.fastq";fi) $REPLACEN $SAVEIDSPOTS > $OUTFILE
-  else
-    ${ROOT}/bin/aligns_to -db "${DB}" "temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" $(if [ $INFILE ]; then echo "${INFILE}";else echo "temp.fastq";fi) $REPLACEN $SAVEIDSPOTS
+    ${ROOT}/bin/aligns_to -db "${DB}" "$TMP_F_DIR/temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" $(if [ $INFILE ]; then echo "${INFILE}";else echo "$TMP_F_DIR/temp.fastq";fi) $REPLACEN $SAVEIDSPOTS > $OUTFILE
+    if [ $SAVEIDSPOTS ] && [ -e "$TMP_F_DIR/temp.fastq.removed_spots" ];
+        then
+          cp "$TMP_F_DIR/temp.fastq.removed_spots" "$OUTFILE.removed_spots"
+    fi
+else
+    ${ROOT}/bin/aligns_to -db "${DB}" "$TMP_F_DIR/temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" $(if [ $INFILE ]; then echo "${INFILE}";else echo "$TMP_F_DIR/temp.fastq";fi) $REPLACEN
 fi
 
 #Check if TESTING was successful
