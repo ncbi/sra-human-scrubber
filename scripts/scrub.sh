@@ -49,7 +49,7 @@ done
 #Check for empty stdin and no args
 [ -t 0 ] && [ $# == 0 ] && usage
 
-if [ ! -e "${INFILE}" ] && [ -t 0 ] && [ -e "${@:$#}" ];
+if [ ! -e "${INFILE}" ] && [ -t 0 ] && [[ -e "${@:$#}" || "${@:$#}" == "test" ]];
   then
     INFILE="${@:$#}"
 fi
