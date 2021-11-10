@@ -45,7 +45,7 @@ while getopts ":i:o:d:hnrt" opts; do
     esac
 done
 
-#Check for empty stdin and no args 
+#Check for empty stdin and no args
 [ -t 0 ] && [ $# == 0 ] && usage
 
 if [ ! -e "${INFILE}" ] && [ -t 0 ] && [ -e "${@:$#}" ];
@@ -66,10 +66,10 @@ if $RUNTEST && [ -e "$ROOT/test/scrubber_test.fastq" ];
     INFILE=$TMP_DIR/scrubber_test.fastq
 fi
 
-if [ ! "${OUTFILE}" ] && [ -t 0 ]; 
+if [ ! "${OUTFILE}" ] && [ -t 0 ];
    then 
-     OUTFILE="$INFILE.clean" 
-fi    
+     OUTFILE="$INFILE.clean"
+fi
 
 #Convert to FASTA, create temp fastq if reading from stdin
 TMP_F_DIR=$(mktemp -d)
