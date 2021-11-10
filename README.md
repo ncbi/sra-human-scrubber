@@ -1,6 +1,6 @@
 ## ncbi::sra-human-scrubber 
 ### Description
-The human read removal tool (HRRT) is based on the SRA Taxonomy Analysis Tool ([manuscript in submission](https://biorxiv.org/cgi/content/short/2021.02.16.431451v2)) that will take as input a fastq file, and produce as output a fastq.clean file in which all reads identified as potentially of human origin are removed.
+The human read removal tool (HRRT) is based on the [SRA Taxonomy Analysis Tool](https://doi.org/10.1186/s13059-021-02490-0) that will take as input a fastq file, and produce as output a fastq.clean file in which all reads identified as potentially of human origin are removed.
 ### Overview
 Briefly, the HRRT is based on a k-mer database that is constructed from the k-mers derived from all human RefSeq records and subtracts the library of k-mers generated from all non-Eukaryota RefSeq records. The remaining set of k-mers are the database used to ID human reads by the removal tool. This means it tends to be aggressive about identifying human reads since it contains not only human-specific k-mers, but also k-mers common to primates, mammals, and other lineages further up the Eukaryotic tree. However, it is also fairly conservative at maintaining any viral or bacterial clinical pathogen sequences. It takes a fastq file as input, removes any reads with hits to the 'human' k-mer database and outputs a fastq.clean with the identified human reads removed.
 ### Quick Start
@@ -80,3 +80,17 @@ Note the application scales to use all threads available
 139  spot(s) removed.
 ```
 Docker container available here: https://hub.docker.com/r/ncbi/sra-human-scrubber
+
+Other useful options
+```
+[sra-human-scrubber]$ ./scripts/scrub.sh -h
+Usage: scrub.sh [OPTIONS] [file.fastq] 
+OPTIONS:
+	-i <input_file>; Input Fastq File
+	-o <output_file>; Save cleaned sequence reads to file, or set to - for stdout.
+		NOTE: When stdin is used, output is stdout by default.
+	-d <database_path>; Specify path to custom database file (e.g. human_filter.db).
+	-n ; Replace sequence length of identified spots with 'N'
+	-r ; Save identified spots to file.fastq.spots_removed
+	-h ; Display this message
+```
