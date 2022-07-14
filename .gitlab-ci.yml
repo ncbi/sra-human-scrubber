@@ -1,0 +1,20 @@
+stages:
+  - build-docker-image
+  - deploy
+
+build-docker-image:
+  stage: build-docker-image
+  image: gitlabreg.be-md.ncbi.nlm.nih.gov:5050/pd/do/ci/public-docker-images/kaniko-executor:v1.6.0-debug
+  variables:
+    SERVICE_NAME: "root"
+    BRANCH_NAME: "${CI_COMMIT_BRANCH}"
+  script:
+    - if [ "$IMAGE_EXISTS" ] && ! [ "$DO_FORCE_IMAGE_BUILD" ]; then echo "Image for this repo SHA was already uploaded, skip job"; exit 0; fi
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context "./" --dockerfile "Dockerfile" --destination "${CI_REGISTRY_IMAGE}/${BRANCH_NAME}-${SERVICE_NAME}:${CI_COMMIT_SHA}" --destination "${CI_REGISTRY_IMAGE}/${BRANCH_NAME}-${SERVICE_NAME}:latest" --single-snapshot --push-retry 2
+
+include:
+  - project: pd/sra/srab/cd
+    ref: master
+    file: push_docker_image_to_gcr.yml
