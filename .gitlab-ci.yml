@@ -7,7 +7,7 @@ push_docker_image_to_gcr:
   image: google/cloud-sdk:325.0.0
   needs: ["build-docker-image"]
   script:
-    - curl --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" "${CRANE_URL}"
+    - 'curl --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" "${CRANE_URL}"'
     - tar -xvzf "crane${CRANE_VER}.tar.gz" && chmod +x crane
     - export CLOUDSDK_CONFIG=$CI_PROJECT_DIR
     - export GCP_ARTIFACT_REGISTRY_URL=$(echo ${GCP_ARTIFACT_REGISTRY} | cut -d"/" -f1)
