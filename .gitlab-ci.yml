@@ -8,8 +8,8 @@ push_docker_image_to_gcr:
   needs: ["build-docker-image"]
 
   script:
-      - curl --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" "https://gitlab.be-md.ncbi.nlm.nih.gov/api/v4/projects/3171/repository/files/crane0.9.0.tar.gz/raw?ref=singleton"
-      - tar -xvzf crane0.9.0.tar.gz && chmod +x crane
+      - curl --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" "${CRANE_URL}"
+      - tar -xvzf "crane${CRANE_VER}.tar.gz" && chmod +x crane
       - export CLOUDSDK_CONFIG=$CI_PROJECT_DIR
       - export GCP_ARTIFACT_REGISTRY_URL=$(echo ${GCP_ARTIFACT_REGISTRY} | cut -d"/" -f1)
 
