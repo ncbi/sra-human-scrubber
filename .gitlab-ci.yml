@@ -11,15 +11,15 @@ push_docker_image_to_gcr:
     - tar -xvzf "crane${CRANE_VER}.tar.gz" && chmod +x crane
     - export CLOUDSDK_CONFIG=$CI_PROJECT_DIR
     - export GCP_ARTIFACT_REGISTRY_URL=$(echo ${GCP_ARTIFACT_REGISTRY} | cut -d"/" -f1)
-    -
+
     # login to GitLab Registry
     - crane auth login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    -
+
     # login to Google Artifact Registry
     - gcloud auth activate-service-account --key-file=${GCP_IMAGE_PUSH_CREDENTIALS}
     - gcloud auth print-access-token | crane auth login -u oauth2accesstoken --password-stdin ${GCP_ARTIFACT_REGISTRY_URL}
     # copy image
-    - 
+
     - crane copy "${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_}${SLUG_OR_NAME}-${SERV_NAME}:${CI_COMMIT_SHA}" "${GCP_ARTIFACT_REGISTRY}/${CI_COMMIT_REF_}${SLUG_OR_NAME}-${SERV_NAME}:${CI_COMMIT_SHA}"
     - crane tag "${GCP_ARTIFACT_REGISTRY}/${CI_COMMIT_REF_}${SLUG_OR_NAME}-${SERV_NAME}:${CI_COMMIT_SHA}" "latest"
 
