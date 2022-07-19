@@ -7,7 +7,7 @@ push_docker_image_to_gcr:
   image: google/cloud-sdk:325.0.0
   needs: ["build-docker-image"]
   script:
-    - 'curl --header "PRIVATE-TOKEN: ${CI_JOB_TOKEN}" "${CRANE_URL}"'
+    - 'curl --header "PRIVATE-TOKEN:${CI_JOB_TOKEN}" "${CRANE_URL}"'
     - tar -xvzf "crane${CRANE_VER}.tar.gz" && chmod +x crane
     - export CLOUDSDK_CONFIG=$CI_PROJECT_DIR
     - export GCP_ARTIFACT_REGISTRY_URL=$(echo ${GCP_ARTIFACT_REGISTRY} | cut -d"/" -f1)
@@ -30,4 +30,3 @@ build-docker-image:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context "./" --dockerfile "Dockerfile" --destination "${CI_REGISTRY_IMAGE}/${CI_COMMIT_BRANCH}-${IMAGE_NAME}:${CI_COMMIT_SHA}" --destination "${CI_REGISTRY_IMAGE}/${CI_COMMIT_BRANCH}-${IMAGE_NAME}:latest" --single-snapshot --push-retry 2
-
