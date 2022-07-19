@@ -25,7 +25,7 @@ push_docker_image_to_gcr:
 
 build-docker-image:
   stage: build-docker-image
-  image: "$KANIKO_IMAGE_URL"
+  image: gitlabreg.be-md.ncbi.nlm.nih.gov:5050/pd/do/ci/public-docker-images/kaniko-executor:v1.6.0-debug
   script:
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
