@@ -20,8 +20,8 @@ push_docker_image_to_gcr:
     - gcloud auth print-access-token | crane auth login -u oauth2accesstoken --password-stdin ${GCP_ARTIFACT_REGISTRY_URL}
     # copy image
 
-    - crane copy "${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_}${SLUG_OR_NAME}-${SERV_NAME}:${CI_COMMIT_SHA}" "${GCP_ARTIFACT_REGISTRY}/${CI_COMMIT_REF_}${SLUG_OR_NAME}-${SERV_NAME}:${CI_COMMIT_SHA}"
-    - crane tag "${GCP_ARTIFACT_REGISTRY}/${CI_COMMIT_REF_}${SLUG_OR_NAME}-${SERV_NAME}:${CI_COMMIT_SHA}" "latest"
+    - crane copy "${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_}${SLUG_OR_NAME}-${IMAGE_NAME}:${CI_COMMIT_SHA}" "${GCP_ARTIFACT_REGISTRY}/${CI_COMMIT_REF_}${SLUG_OR_NAME}-${IMAGE_NAME}:${CI_COMMIT_SHA}"
+    - crane tag "${GCP_ARTIFACT_REGISTRY}/${CI_COMMIT_REF_}${SLUG_OR_NAME}-${IMAGE_NAME}:${CI_COMMIT_SHA}" "latest"
 
 build-docker-image:
   stage: build-docker-image
