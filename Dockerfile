@@ -3,6 +3,5 @@ COPY . /opt/scrubber/
 WORKDIR /opt/scrubber
 RUN /opt/scrubber/init_db.sh
 ENV PATH="/usr/bin:/opt/scrubber/bin:/opt/scrubber/scripts:${PATH}"
-WORKDIR /opt/scrubber
 RUN ldconfig
 
