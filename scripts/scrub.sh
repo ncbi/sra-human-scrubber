@@ -76,10 +76,10 @@ fi
 TMP_F_DIR=$(mktemp -d)
 if [ -t 0 ];
   then
-    python "$ROOT/scripts/fastq_to_fasta.py" < "${INFILE}" > "$TMP_F_DIR/temp.fasta"
+     "$ROOT/scripts/fastq_to_fasta.py" < "${INFILE}" > "$TMP_F_DIR/temp.fasta"
 elif [ ! -t 0 ];
   then
-    tee "$TMP_F_DIR/temp.fastq" | python "$ROOT/scripts/fastq_to_fasta.py" > "$TMP_F_DIR/temp.fasta"
+    tee "$TMP_F_DIR/temp.fastq" |  "$ROOT/scripts/fastq_to_fasta.py" > "$TMP_F_DIR/temp.fasta"
 fi
 
 #Use infile or temp fastq and either send output to stdout or specified fasta
