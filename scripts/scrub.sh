@@ -65,7 +65,13 @@ if $RUNTEST && [ -e "$ROOT/test/scrubber_test.fastq" ];
     TMP_DIR=$(mktemp -d)
     cp "$ROOT"/test/* "$TMP_DIR/"
     INFILE=$TMP_DIR/scrubber_test.fastq
+elif $RUNTEST && [ ! -e "$ROOT/test/scrubber_test.fastq" ];
+  then
+    echo "$ROOT/test/scrubber_test.fastq\n"
+    echo "dir: $DIR, root: $ROOT\n"
 fi
+
+
 
 if [ ! "${OUTFILE}" ] && [ -t 0 ];
    then 
