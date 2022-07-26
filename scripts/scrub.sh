@@ -67,8 +67,8 @@ if $RUNTEST && [ -e "$ROOT/test/scrubber_test.fastq" ];
     INFILE=$TMP_DIR/scrubber_test.fastq
 elif $RUNTEST && [ ! -e "$ROOT/test/scrubber_test.fastq" ];
   then
-    echo "$ROOT/test/scrubber_test.fastq\n"
-    echo "dir: $DIR, root: $ROOT\n"
+    printf "%s\n" "$ROOT/test/scrubber_test.fastq"
+    printf "dir: %s, root: %s\n" "$DIR $ROOT"
 fi
 
 
