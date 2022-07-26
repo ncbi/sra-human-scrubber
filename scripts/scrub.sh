@@ -65,13 +65,7 @@ if $RUNTEST && [ -e "$ROOT/test/scrubber_test.fastq" ];
     TMP_DIR=$(mktemp -d)
     cp "$ROOT"/test/* "$TMP_DIR/"
     INFILE=$TMP_DIR/scrubber_test.fastq
-elif $RUNTEST && [ ! -e "$ROOT/test/scrubber_test.fastq" ];
-  then
-    printf "%s\n" "$ROOT/test/scrubber_test.fastq"
-    printf "dir: %s, root: %s\n" "$DIR $ROOT"
 fi
-
-
 
 if [ ! "${OUTFILE}" ] && [ -t 0 ];
    then 
@@ -83,6 +77,8 @@ TMP_F_DIR=$(mktemp -d)
 if [ -t 0 ];
   then
      "$ROOT/scripts/fastq_to_fasta.py" < "${INFILE}" > "$TMP_F_DIR/temp.fasta"
+     ls -l  "$TMP_F_DIR/temp.fasta"
+     printf "\n"
 elif [ ! -t 0 ];
   then
     tee "$TMP_F_DIR/temp.fastq" |  "$ROOT/scripts/fastq_to_fasta.py" > "$TMP_F_DIR/temp.fasta"
