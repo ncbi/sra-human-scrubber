@@ -49,7 +49,7 @@ done
 #Check for empty stdin and no args
 [ -t 0 ] && [ $# == 0 ] && usage
 
-if [ ! -e "${INFILE}" ] && [ -t 0 ] && [[ -e "${@:$#}" || "${@:$#}" == "test" ]];
+if [ ! -e "${INFILE}" ]  && [[ -e "${@:$#}" || "${@:$#}" == "test" ]];
   then
     INFILE="${@:$#}"
 fi
@@ -72,26 +72,25 @@ if [ ! "${OUTFILE}" ] && [ "${INFILE}" ];
      OUTFILE="$INFILE.clean"
 fi
 
-#Convert to FASTA, create temp fastq if reading from stdin
+#Create temp fastq if reading from stdin
 TMP_F_DIR=$(mktemp -d)
 if [ ! -e "${INFILE}" ];
   then
     tee  > "$TMP_F_DIR/temp.fastq"
     INFILE="$TMP_F_DIR/temp.fastq"
 fi
-
+#Use infile or temp fastq and generate fasta
 "$ROOT/scripts/fastq_to_fasta.py" < "${INFILE}" > "$TMP_F_DIR/temp.fasta"
 
-#Use infile or temp fastq and either send output to stdout or specified fasta
 if [ "$OUTFILE" ] && [ "$OUTFILE" != "-" ];
   then
-    "${ROOT}"/bin/aligns_to -db "${DB}" "$TMP_F_DIR/temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE $REPLACEN $SAVEIDSPOTS > $OUTFILE"
+    "${ROOT}"/bin/aligns_to -db "${DB}" "$TMP_F_DIR/temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN" "$SAVEIDSPOTS" > "$OUTFILE"
     if [ "$SAVEIDSPOTS" ] && [ -e "$TMP_F_DIR/temp.fastq.removed_spots" ];
-        then
-          cp "$TMP_F_DIR/temp.fastq.removed_spots" "$OUTFILE.removed_spots"
+      then
+        cp "$TMP_F_DIR/temp.fastq.removed_spots" "$OUTFILE.removed_spots"
     fi
-else
-    "${ROOT}"/bin/aligns_to -db "${DB}" "$TMP_F_DIR/temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE $REPLACEN"
+    else
+      "${ROOT}"/bin/aligns_to -db "${DB}" "$TMP_F_DIR/temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN"
 fi
 
 #Check if TESTING was successful
