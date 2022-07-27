@@ -8,6 +8,7 @@ usage() {
     printf "\t-i <input_file>; Input Fastq File.\n"
     printf "\t-o <output_file>; Save cleaned sequence reads to file, or set to "-" for stdout.\n"
     printf "\t\tNOTE: When stdin is used, output is stdout by default.\n"
+    printf "\t-p <number> Number of threads to use\n."
     printf "\t-d <database_path>; Specify path to custom database file (e.g. human_filter.db).\n"
     printf "\t-n ; Replace sequence length of identified spots with 'N'.\n"
     printf "\t-r ; Save identified spots to file.fastq.spots_removed.\n"
@@ -22,18 +23,21 @@ OUTFILE=
 REPLACEN=
 SAVEIDSPOTS=
 RUNTEST=false
+THREADS=
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"  >/dev/null 2>&1 && pwd  )"
 ROOT=$(dirname $DIR)
 DB=$ROOT/data/human_filter.db
 
 #Get input
-while getopts ":i:o:d:hnrt" opts; do
+while getopts ":i:o:d:p:hnrt" opts; do
     case $opts in
         i) INFILE=${OPTARG}
             ;;
         o) OUTFILE=${OPTARG}
             ;;
         d) DB=${OPTARG}
+            ;;
+        p) THREADS=${OPTARG}
             ;;
         n) REPLACEN=" -n "
             ;;
@@ -84,13 +88,13 @@ fi
 
 if [ "$OUTFILE" ] && [ "$OUTFILE" != "-" ];
   then
-    "${ROOT}"/bin/aligns_to -db "${DB}" "$TMP_F_DIR/temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN" "$SAVEIDSPOTS" > "$OUTFILE"
+    "${ROOT}"/bin/aligns_to -db "${DB}" $(if [[ "$THREADS" =~ ^[0-9]+$ ]]; then printf "%s" "-num_threads $THREADS"; fi) "$TMP_F_DIR/temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN" "$SAVEIDSPOTS" > "$OUTFILE"
     if [ "$SAVEIDSPOTS" ] && [ -e "$TMP_F_DIR/temp.fastq.removed_spots" ];
       then
         cp "$TMP_F_DIR/temp.fastq.removed_spots" "$OUTFILE.removed_spots"
     fi
     else
-      "${ROOT}"/bin/aligns_to -db "${DB}" "$TMP_F_DIR/temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN"
+      "${ROOT}"/bin/aligns_to -db "${DB}" $(if [[ "$THREADS" =~ ^[0-9]+$ ]]; then printf "%s" "-num-threads $THREADS"; fi) "$TMP_F_DIR/temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN"
 fi
 
 #Check if TESTING was successful
