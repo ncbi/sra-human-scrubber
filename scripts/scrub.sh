@@ -46,8 +46,8 @@ while getopts ":i:o:d:hnrt" opts; do
     esac
 done
 
-#Check for empty stdin and no args
-[ -t 0 ] && [ $# == 0 ] && usage
+#Check for no args
+[ $# == 0 ] && usage
 
 if [ ! -e "${INFILE}" ]  && [[ -e "${@:$#}" || "${@:$#}" == "test" ]];
   then
