@@ -39,9 +39,9 @@ while getopts ":i:o:d:p:hnrt" opts; do
             ;;
         p) THREADS=${OPTARG}
             ;;
-        n) REPLACEN=" -n "
+        n) REPLACEN="-n"
             ;;
-        r) SAVEIDSPOTS=" -r "
+        r) SAVEIDSPOTS="-r"
             ;;
         t) RUNTEST=true
             ;;
