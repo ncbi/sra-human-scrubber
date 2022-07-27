@@ -89,9 +89,11 @@ OPTIONS:
 	-i <input_file>; Input Fastq File.
 	-o <output_file>; Save cleaned sequence reads to file, or set to - for stdout.
 		NOTE: When stdin is used, output is stdout by default.
+	-p <number> Number of threads to use.
 	-d <database_path>; Specify path to custom database file (e.g. human_filter.db).
 	-n ; Replace sequence length of identified spots with 'N'.
 	-r ; Save identified spots to file.fastq.spots_removed.
 	-t ; Run test.
 	-h ; Display this message.
+
 ```
