@@ -10,7 +10,8 @@ usage() {
     printf "\t\tNOTE: When stdin is used, output is stdout by default.\n"
     printf "\t-p <number> Number of threads to use.\n"
     printf "\t-d <database_path>; Specify path to custom database file (e.g. human_filter.db).\n"
-    printf "\t-n ; Replace sequence length of identified spots with 'N'.\n"
+    printf "\t\tNOTE: Now by default sequence length of identified spots replaced with 'N'.\n"
+    printf "\t-x ; Remove spots instead of default 'N' replacement.\n"
     printf "\t-r ; Save identified spots to file.fastq.spots_removed.\n"
     printf "\t-t ; Run test.\n"
     printf "\t-h ; Display this message.\n\n"
@@ -20,7 +21,7 @@ usage() {
 #Initalize vars
 INFILE=
 OUTFILE=
-REPLACEN=
+REPLACEN="-n" #default is now to replace with N
 SAVEIDSPOTS=
 RUNTEST=false
 THREADS=
@@ -29,7 +30,7 @@ ROOT=$(dirname $DIR)
 DB=$ROOT/data/human_filter.db
 
 #Get input
-while getopts ":i:o:d:p:hnrt" opts; do
+while getopts ":i:o:d:p:hxrt" opts; do
     case $opts in
         i) INFILE=${OPTARG}
             ;;
@@ -39,7 +40,7 @@ while getopts ":i:o:d:p:hnrt" opts; do
             ;;
         p) THREADS=${OPTARG}
             ;;
-        n) REPLACEN="-n"
+        x) REPLACEN="" # now default is on, this is to turn off
             ;;
         r) SAVEIDSPOTS="-r"
             ;;
