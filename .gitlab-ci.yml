@@ -4,7 +4,7 @@ stages:
 
 include:
   - project: pd/sra/srab/cd
-    ref: master
+    ref: ci-625-test-do-crane
     file: push_docker_image_to_gcr.yml
 
 #push_docker_image_to_gcr:
