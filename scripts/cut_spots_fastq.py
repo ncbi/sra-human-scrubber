@@ -79,7 +79,7 @@ def main():
 
         spot_id += 1
 
-    print(len(spots), " spot(s) removed.", file=sys.stderr)
+    print(len(spots), " spot(s) masked or removed.", file=sys.stderr)
 
 
 main()
