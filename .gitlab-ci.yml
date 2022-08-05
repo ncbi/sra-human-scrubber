@@ -9,9 +9,8 @@ stages:
 
 push_docker_image_to_gcr:
   stage: deploy
-  image: ${CI_CONTAINER_REGISTRY}/pd/do/ex/ci/univeral-ci/builder/crane:develop
+  image: gitlabreg.be-md.ncbi.nlm.nih.gov:5050/pd/do/ex/ci/universal-ci/builder/crane:develop
   needs: ["build-docker-image"]
-  script:
     - export CLOUDSDK_CONFIG=$CI_PROJECT_DIR
     - export GCP_ARTIFACT_REGISTRY_URL=$(echo ${GCP_ARTIFACT_REGISTRY} | cut -d"/" -f1)
 
