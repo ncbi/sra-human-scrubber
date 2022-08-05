@@ -9,7 +9,7 @@ stages:
 
 push_docker_image_to_gcr:
   stage: deploy
-  image: ${CI_CONTAINER_REGISTRY}/pd/do/ex/ci/univeral-ci/builder/crane:develop
+  image: ${CRANE_IMAGE}
   needs: ["build-docker-image"]
   script:
     - export CLOUDSDK_CONFIG=$CI_PROJECT_DIR
