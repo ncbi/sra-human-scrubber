@@ -22,7 +22,8 @@ push_docker_image_to_gcr:
     - curl -s -L -o google-cloud-sdk.tar.gz https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz
     - mkdir -p /usr/local/gcloud && tar -C /usr/local/gcloud -xvf google-cloud-sdk.tar.gz
     - /usr/local/gcloud/google-cloud-sdk/install.sh --quiet
-    - export $PATH:/usr/local/gcloud/google-cloud-sdk/bin
+    - source /usr/local/gcloud/google-cloud-sdk/path.bash.inc
+    #- export $PATH:/usr/local/gcloud/google-cloud-sdk/bin
 
     # login to Google Artifact Registry
     - gcloud auth activate-service-account --key-file=${GCP_IMAGE_PUSH_CREDENTIALS}
