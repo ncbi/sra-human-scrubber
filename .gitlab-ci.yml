@@ -18,6 +18,12 @@ push_docker_image_to_gcr:
     # login to GitLab Registry
     - crane auth login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
+    # install gcloud
+    - curl -s -L -o google-cloud-sdk.tar.gz https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz && \
+      mkdir -p /usr/local/gcloud && tar -C /usr/local/gcloud -xvf google-cloud-sdk.tar.gz && \
+      /usr/local/gcloud/google-cloud-sdk/install.sh --quiet
+    - export $PATH:/usr/local/gcloud/google-cloud-sdk/bin
+
     # login to Google Artifact Registry
     - gcloud auth activate-service-account --key-file=${GCP_IMAGE_PUSH_CREDENTIALS}
     - gcloud auth print-access-token | crane auth login -u oauth2accesstoken --password-stdin ${GCP_ARTIFACT_REGISTRY_URL}
