@@ -2,12 +2,13 @@
 ### Description
 The human read removal tool (HRRT) is based on the [SRA Taxonomy Analysis Tool](https://doi.org/10.1186/s13059-021-02490-0) that will take as input a fastq file, and produce as output a fastq.clean file in which all reads identified as potentially of human origin are removed.
 ### Overview
-Briefly, the HRRT is based on a k-mer database that is constructed from the k-mers derived from all human RefSeq records and subtracts the library of k-mers generated from all non-Eukaryota RefSeq records. The remaining set of k-mers are the database used to ID human reads by the removal tool. This means it tends to be aggressive about identifying human reads since it contains not only human-specific k-mers, but also k-mers common to primates, mammals, and other lineages further up the Eukaryotic tree. However, it is also fairly conservative at maintaining any viral or bacterial clinical pathogen sequences. It takes a fastq file as input, identifies any reads with hits to the 'human' k-mer database and outputs a fastq.clean with the identified human reads masked with 'N'.
+Briefly, the HRRT is based on a k-mer database that is constructed from the k-mers derived from all human RefSeq records and subtracts the library of k-mers generated from all non-Eukaryota RefSeq records. The remaining set of k-mers are the database used to ID human reads by the removal tool. This means it tends to be aggressive about identifying human reads since it contains not only human-specific k-mers, but also k-mers common to primates, mammals, and other lineages further up the Eukaryotic tree. However, it is also fairly conservative at maintaining any viral or bacterial clinical pathogen sequences. It takes a fastq file as input, identifies any reads with hits to the 'human' k-mer database and outputs a fastq.clean with
+the identified human reads masked with 'N'. Note that for an interleaved paired-read input file, whenever a read is identified as human the pair mate will also be masked *whether or not it too is identified as human.*
 ### Quick Start
 * Clone the repo.
 * `pushd` or `cd` to directory `sra-human-scrubber`.
 	* Alternatively, download the zip file from the green 'Code' button, unzip it, then cd to directory `sra-human-scrubber-master`.
-* Execute `./init_db.sh` in directory `sra-human-scrubber` - this will retrieve the pre-built db from ftp and place it in the directory `sra-human-scrubber/data` where it needs to be located.
+* Execute `./init_db.sh` in directory `sra-human-scrubber` - this will retrieve the default (newest) pre-built db from ftp and place it in the directory `sra-human-scrubber/data` where it needs to be located.
 * Please note binary `aligns_to`in bin was compiled on x86_64 GNU/Linux. 
 
 
