@@ -1,8 +1,8 @@
 ## ncbi::sra-human-scrubber 
 ### Description
-The human read removal tool (HRRT) is based on the [SRA Taxonomy Analysis Tool](https://doi.org/10.1186/s13059-021-02490-0) that will take as input a fastq file, and produce as output a fastq.clean file in which all reads identified as potentially of human origin are removed.
+The human read removal tool (HRRT) is based on the [SRA Taxonomy Analysis Tool](https://doi.org/10.1186/s13059-021-02490-0) that will take as input a fastq file, and produce as output a fastq.clean file in which all reads identified as potentially of human origin are masked with 'N'.
 ### Overview
-Briefly, the HRRT is based on a k-mer database that is constructed from the k-mers derived from all human RefSeq records and subtracts the library of k-mers generated from all non-Eukaryota RefSeq records. The remaining set of k-mers are the database used to ID human reads by the removal tool. This means it tends to be aggressive about identifying human reads since it contains not only human-specific k-mers, but also k-mers common to primates, mammals, and other lineages further up the Eukaryotic tree. However, it is also fairly conservative at maintaining any viral or bacterial clinical pathogen sequences. It takes a fastq file as input, identifies any reads with hits to the 'human' k-mer database and outputs a fastq.clean with
+Briefly, the HRRT is based on a k-mer database that is constructed from the k-mers derived from all human RefSeq records and subtracts the library of k-mers generated from all non-Eukaryota RefSeq records. The remaining set of k-mers compose the database used to identify human reads by the removal tool. This means it tends to be aggressive about identifying human reads since it contains not only human-specific k-mers, but also k-mers common to primates, mammals, and other lineages further up the Eukaryotic tree. However, it is also fairly conservative at maintaining any viral or bacterial clinical pathogen sequences. It takes a fastq file as input, identifies any reads with hits to the 'human' k-mer database and outputs a fastq.clean with
 the identified human reads masked with 'N'. Note that for an interleaved paired-read input file, whenever a read is identified as human the pair mate will also be masked *whether or not it too is identified as human.*
 ### Quick Start
 * Clone the repo.
@@ -33,7 +33,7 @@ Here the command is simply given the (file) argument `test`
 test succeeded
 ```
 
-#### Remove human reads from fastq file
+#### Mask human reads from fastq file
 
 Here the command is given the path to your local fastq file as argument
 `./scripts/scrub.sh path-to-fastq-file/filename.fastq`
@@ -59,14 +59,8 @@ Example:
 139  spot(s) removed.
 
 ```
-
-```
-$ ls -l Runs/
-total 275816
- rw-rr- 1 xxx xxx 141280412 Feb 19 00:03 SRR13402847.fastq
- rw-rr- 1 xxx xxx 141151371 Feb 22 17:06 SRR13402847.fastq.clean
-```
-Note the application scales to use all threads available
+Note by default the application scales to use all threads available
+( see option `-p` for setting threads below ).
 
 ```
 2021-03-29 08:39:07	aligns_to version 0.60
@@ -92,7 +86,8 @@ OPTIONS:
 		NOTE: When stdin is used, output is stdout by default.
 	-p <number> Number of threads to use.
 	-d <database_path>; Specify path to custom database file (e.g. human_filter.db).
-	-n ; Replace sequence length of identified spots with 'N'.
+		NOTE: Now by default sequence length of identified spots replaced with 'N'.
+	-x ; Remove spots instead of default 'N' replacement.
 	-r ; Save identified spots to file.fastq.spots_removed.
 	-t ; Run test.
 	-h ; Display this message.
