@@ -9,7 +9,7 @@ usage() {
     printf "\t-o <output_file>; Save cleaned sequence reads to file, or set to "-" for stdout.\n"
     printf "\t\tNOTE: When stdin is used, output is stdout by default.\n"
     printf "\t-p <number> Number of threads to use.\n"
-    printf "\t-d <database_path>; Specify path to custom database file (e.g. human_filter.db).\n"
+    printf "\t-d <database_path>; Specify a database to use (e.g., local_path/human_filter.db).\n"
     printf "\t\tNOTE: Now by default sequence length of identified spots replaced with 'N'.\n"
     printf "\t-x ; Remove spots instead of default 'N' replacement.\n"
     printf "\t-r ; Save identified spots to file.fastq.spots_removed.\n"
