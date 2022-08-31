@@ -8,7 +8,7 @@ the identified human reads masked with 'N'. Note that for an interleaved paired-
 * Clone the repo.
 * `pushd` or `cd` to directory `sra-human-scrubber`.
     * Alternatively, download the zip file from the green 'Code' button, unzip it, then cd to directory `sra-human-scrubber-master`.
-* Execute `./init_db.sh` in directory `sra-human-scrubber` - this will retrieve the default (newest) pre-built db from ftp and place it in the directory `sra-human-scrubber/data` where it needs to be located.
+* Execute `./init_db.sh` in directory `sra-human-scrubber` - this will retrieve the default (newest) pre-built db from [ftp](https://ftp.ncbi.nlm.nih.gov/sra/dbs/human_filter/) and place it in the directory `sra-human-scrubber/data` where it needs to be located.
 * Please note binary `aligns_to`in bin was compiled on x86_64 GNU/Linux. 
 * Please refer to CHANGELOG for recent changes.
 
