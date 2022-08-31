@@ -1,7 +1,7 @@
 # Changelog
 ## [Unreleased]
 
-## [ 2.0.0 ] - 2022-MM-DD 
+## [ 2.0.0 ] - 2022-08-31
 ### Changed
 * #### Make masking read sequence to 'N' default (!)
 ### Removed
