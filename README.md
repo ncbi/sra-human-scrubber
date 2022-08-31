@@ -19,15 +19,17 @@ Here the command is simply given the (file) argument `test`
 `./scripts/scrub.sh test`
 
 ```
-2021-03-29 12:31:48	aligns_to version 0.60
-2021-03-29 12:31:48	hardware threads: 1, omp threads: 1
-2021-03-29 12:31:50	loading time (sec) 1
-2021-03-29 12:31:50	/tmp/tmp.lzwaZO4fwI/scrubber_test.fastq.fasta
-2021-03-29 12:31:50	100% processed
-2021-03-29 12:31:50	total spot count: 2
-2021-03-29 12:31:50	total read count: 2
-2021-03-29 12:31:50	total time (sec) 1
-1  spot(s) removed.
+./scripts/scrub.sh test
+2022-08-31 14:35:08	aligns_to version 0.707
+2022-08-31 14:35:08	hardware threads: 32, omp threads: 32
+2022-08-31 14:35:09	loading time (sec) 1
+2022-08-31 14:35:09	/tmp/tmp.EpHdBbPYzb/temp.fasta
+2022-08-31 14:35:09	FastaReader
+2022-08-31 14:35:09	100% processed
+2022-08-31 14:35:09	total spot count: 2
+2022-08-31 14:35:09	total read count: 2
+2022-08-31 14:35:09	total time (sec) 1
+1  spot(s) masked or removed.
 
 test succeeded
 ```
@@ -38,44 +40,28 @@ Here the command is given the path to your local fastq file as argument
 `./scripts/scrub.sh path-to-fastq-file/filename.fastq`
 
 Example:
-`./scripts/scrub.sh Runs/SRR13402847.fastq`
+`./scripts/scrub.sh $TmpRuns/MyFastqFile.fastq`
 
 ```
-2021-03-29 12:33:49	aligns_to version 0.60
-2021-03-29 12:33:49	hardware threads: 1, omp threads: 1
-2021-03-29 12:33:49	loading time (sec) 0
-2021-03-29 12:33:49	Runs/SRR13402847.fastq.fasta
-2021-03-29 12:33:49	15% processed
-2021-03-29 12:33:56	30% processed
-2021-03-29 12:34:02	46% processed
-2021-03-29 12:34:08	62% processed
-2021-03-29 12:34:14	77% processed
-2021-03-29 12:34:20	93% processed
-2021-03-29 12:34:26	100% processed
-2021-03-29 12:34:29	total spot count: 216859
-2021-03-29 12:34:29	total read count: 216859
-2021-03-29 12:34:29	total time (sec) 39
-139  spot(s) removed.
-
+./scripts/scrub.sh $TmpRuns/MyFastqFile.fastq 
+2022-08-31 14:43:58	aligns_to version 0.707
+2022-08-31 14:43:58	hardware threads: 32, omp threads: 32
+2022-08-31 14:43:59	loading time (sec) 1
+2022-08-31 14:43:59	/tmp/tmp.jZwaayxNAA/temp.fasta
+2022-08-31 14:43:59	FastaReader
+2022-08-31 14:43:59	0% processed
+2022-08-31 14:44:00	100% processed
+2022-08-31 14:44:00	total spot count: 216859
+2022-08-31 14:44:00	total read count: 216859
+2022-08-31 14:44:00	total time (sec) 2
+129  spot(s) masked or removed.
 ```
 Note by default the application scales to use all threads available
 ( see option `-p` for setting threads below ).
 
-```
-2021-03-29 08:39:07	aligns_to version 0.60
-2021-03-29 08:39:07	hardware threads: 32, omp threads: 32
-2021-03-29 08:39:10	loading time (sec) 2
-2021-03-29 08:39:10	/home/kskatz/SCRUBBER/Runs/SRR13402847.fastq.fasta
-2021-03-29 08:39:10	15% processed
-2021-03-29 08:39:15	100% processed
-2021-03-29 08:39:15	total spot count: 216859
-2021-03-29 08:39:15	total read count: 216859
-2021-03-29 08:39:15	total time (sec) 8
-139  spot(s) removed.
-```
 Docker container available here: https://hub.docker.com/r/ncbi/sra-human-scrubber
 
-Other useful options
+Other useful options:
 ```
 [sra-human-scrubber]$ ./scripts/scrub.sh -h
 Usage: scrub.sh [OPTIONS] [file.fastq] 
