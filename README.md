@@ -55,6 +55,10 @@ Example:
 2022-08-31 14:44:00	total read count: 216859
 2022-08-31 14:44:00	total time (sec) 2
 129  spot(s) masked or removed.
+
+ls -l $TmpRuns/
+-rw-r--r-- 1   78656910 Aug 31 14:43 MyFastqFile.fastq
+-rw-r--r-- 1   78656910 Aug 31 14:44 MyFastqFile.fastq.clean
 ```
 Note by default the application scales to use all threads available
 ( see option `-p` for setting threads below ).
