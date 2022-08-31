@@ -67,16 +67,16 @@ Docker container available here: https://hub.docker.com/r/ncbi/sra-human-scrubbe
 
 Other useful options:
 ```
-[sra-human-scrubber]$ ./scripts/scrub.sh -h
+./scripts/scrub.sh -h
 Usage: scrub.sh [OPTIONS] [file.fastq] 
 OPTIONS:
 	-i <input_file>; Input Fastq File.
 	-o <output_file>; Save cleaned sequence reads to file, or set to - for stdout.
 		NOTE: When stdin is used, output is stdout by default.
 	-p <number> Number of threads to use.
-	-d <database_path>; Specify path to custom database file (e.g. human_filter.db).
-		NOTE: Now by default sequence length of identified spots replaced with 'N'.
+	-d <database_path>; Specify a database other than default to use.
 	-x ; Remove spots instead of default 'N' replacement.
+		NOTE: Now by default sequence length of identified spots replaced with 'N'.
 	-r ; Save identified spots to file.fastq.spots_removed.
 	-t ; Run test.
 	-h ; Display this message.
