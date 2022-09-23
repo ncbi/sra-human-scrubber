@@ -1,4 +1,3 @@
-ARG CI_REGISTRY
 FROM ${CI_REGISTRY}/pd/do/ci/public-docker-images/centos:7.9.2009 AS base
 COPY . /opt/scrubber/
 WORKDIR /opt/scrubber
