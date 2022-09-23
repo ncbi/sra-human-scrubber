@@ -1,6 +1,12 @@
 # Changelog
 ## [Unreleased]
 
+### Changed
+* Added an md5 check in inital download of database
+### Added
+* `update_db.sh` to check for, and install updated database (with md5 check).
+
+
 ## [ 2.0.0 ] - 2022-08-31
 ### Changed
 * #### Make masking read sequence to 'N' default (!)
