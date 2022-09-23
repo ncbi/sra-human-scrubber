@@ -1,5 +1,5 @@
 ARG CI_REGISTRY
-FROM ${CI_REGISTRY}/pd/do/ci/public-docker-images/centos:7.9.2009 AS base
+FROM ${CI_REGISTRY}/pd/do/p2/ci/ci/runtime/python:python-3.9-production AS base
 COPY . /opt/scrubber/
 WORKDIR /opt/scrubber
 RUN /opt/scrubber/init_db.sh
