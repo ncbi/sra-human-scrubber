@@ -1,5 +1,6 @@
-ARG CI_REGISTRY
-FROM ${CI_REGISTRY}/pd/do/p2/ci/ci/runtime/python:python-3.9-production AS base
+#ARG CI_REGISTRY
+#FROM ${CI_REGISTRY}/pd/do/p2/ci/ci/runtime/python:python-3.9-production AS base
+FROM google/cloud-sdk:latest as build
 COPY . /opt/scrubber/
 WORKDIR /opt/scrubber
 RUN /opt/scrubber/init_db.sh
