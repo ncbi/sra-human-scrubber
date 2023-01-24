@@ -82,3 +82,5 @@ OPTIONS:
 	-h ; Display this message.
 
 ```
+### Note on Additional Testing
+Internally the core scrubber binary (aligns_to) is subject to a Constant Integration (CI) regimen employing automatic testing with any code change. Using two SRA records with significant amounts of human reads, we test that the expected human reads are identified and in one case that the small amount of SARS-CoV-2 reads falsely identified as human is limited to those currently expected.
