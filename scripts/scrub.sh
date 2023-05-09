@@ -54,9 +54,9 @@ done
 #Check for no args
 [ $# == 0 ] && usage
 
-if [ ! -e "${INFILE}" ]  && [[ -e "${@:$#}" || "${@:$#}" == "test" ]];
+if [ ! -e "${INFILE}" ]  && [[ -e "$*" ]];
   then
-    INFILE="${@:$#}"
+    INFILE="$*"
 fi
 
 if [ "$INFILE" == "test" ];
@@ -101,6 +101,17 @@ fi
 #Check if TESTING was successful
 if $RUNTEST;
   then
+    if [ -L "${DB}" ] &&  which readlink > /dev/null 2>&1
+      then
+        f=$(readlink "${DB}")
+        if [[ $f =~ human_filter.db.[0-9]* ]]
+          then
+            echo "DB version is ${f##human_filter.db.}"
+        elif [[ $f =~ [0-9]*.human_filter.db ]]
+          then
+            echo "DB version is ${f%%.human_filter.db}"
+        fi
+    fi
     if [ -e "$TMP_DIR/scrubber_test.fastq.clean" ] &&
      [ -n "$(diff "$TMP_DIR/scrubber_test.fastq.clean" "$TMP_DIR/scrubber_expected_output.fastq")" ]
       then
