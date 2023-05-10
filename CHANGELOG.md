@@ -1,11 +1,11 @@
 # Changelog
 ## [Unreleased]
 
+## [ 2.1.0 ] - 2023-05-10
 ### Changed
-* Added an md5 check in inital download of database
-### Added
-* `update_db.sh` to check for, and install updated database (with md5 check).
-
+* Added an md5 check with download of database
+* `init_db.sh` will also check for and install updated database (with md5 check).
+* Test output includes the database version if available and not a custom installation.
 
 ## [ 2.0.0 ] - 2022-08-31
 ### Changed
