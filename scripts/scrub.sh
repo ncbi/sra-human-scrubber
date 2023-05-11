@@ -54,7 +54,7 @@ done
 #Check for no args
 [ $# == 0 ] && usage
 
-if [ ! -e "${INFILE}" ]  && [[ -e "${@:$#}" ]];
+if [ ! -e "${INFILE}" ]  && [[ -e "${@:$#}" || "${@:$#}" == "test" ]];
   then
     INFILE="${@:$#}"
 fi
