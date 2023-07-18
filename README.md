@@ -3,7 +3,7 @@
 The human read removal tool (HRRT) is based on the [SRA Taxonomy Analysis Tool](https://doi.org/10.1186/s13059-021-02490-0) that will take as input a fastq file, and produce as output a fastq.clean file in which all reads identified as potentially of human origin are masked with 'N'.
 ### Overview
 Briefly, the HRRT employs a k-mer database constructed of k-mers from Eukaryota derived from all human RefSeq records and subtracts any k-mers found in non-Eukaryota RefSeq records. The remaining set of k-mers compose the database used to identify human reads by the removal tool. This means the tool tends to be aggressive about identifying human reads since it contains not only human-specific k-mers, but also k-mers common to primates and other taxa further up the Eukaryotic tree. However, it is also fairly conservative at retaining any viral or bacterial clinical pathogen sequences. It takes a fastq file as input, identifies any reads with hits to the 'human' k-mer database and outputs a fastq.clean with
-the identified human reads masked with 'N'. Note that for an interleaved paired-read input file, whenever a read is identified as human the pair mate will also be masked *whether or not it too is identified as human.*
+the identified human reads masked with 'N'.
 ### Quick Start
 * Clone the repo.
 * `pushd` or `cd` to directory `sra-human-scrubber`.
@@ -77,8 +77,11 @@ OPTIONS:
 	-d <database_path>; Specify a database other than default to use.
 	-x ; Remove spots instead of default 'N' replacement.
 		NOTE: Now by default sequence length of identified spots replaced with 'N'.
-	-r ; Save identified spots to file.fastq.spots_removed.
+	-r ; Save identified spots to <input_file>.spots_removed.
+	-u <user_named_file>; Save identified spots to <user_named_file>.
+		NOTE: Required with -r if output is stdout, otherwise optional.
 	-t ; Run test.
+	-s ; Input is (collated) interleaved paired-end(read) file.
 	-h ; Display this message.
 
 ```

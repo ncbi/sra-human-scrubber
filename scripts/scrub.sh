@@ -13,7 +13,7 @@ usage() {
     printf "\t-x ; Remove spots instead of default 'N' replacement.\n"
     printf "\t\tNOTE: Now by default sequence length of identified spots replaced with 'N'.\n"
     printf "\t-r ; Save identified spots to <input_file>.spots_removed.\n"
-    printf "\t-u <user named file>; Save identified spots to <user_named_file>.\n"
+    printf "\t-u <user_named_file>; Save identified spots to <user_named_file>.\n"
     printf "\t\tNOTE: Required with -r if output is stdout, otherwise optional.\n"
     printf "\t-t ; Run test.\n"
     printf "\t-s ; Input is (collated) interleaved paired-end(read) file.\n"
