@@ -12,8 +12,11 @@ usage() {
     printf "\t-d <database_path>; Specify a database other than default to use.\n"
     printf "\t-x ; Remove spots instead of default 'N' replacement.\n"
     printf "\t\tNOTE: Now by default sequence length of identified spots replaced with 'N'.\n"
-    printf "\t-r ; Save identified spots to file.fastq.spots_removed.\n"
+    printf "\t-r ; Save identified spots to <input_file>.spots_removed.\n"
+    printf "\t-u <user named file>; Save identified spots to <user_named_file>.\n"
+    printf "\t\tNOTE: Required with -r if output is stdout, otherwise optional.\n"
     printf "\t-t ; Run test.\n"
+    printf "\t-s ; Input is (collated) interleaved paired-end(read) file.\n"
     printf "\t-h ; Display this message.\n\n"
     exit 0;
 }
@@ -23,14 +26,16 @@ INFILE=
 OUTFILE=
 REPLACEN="-n" #default is now to replace with N
 SAVEIDSPOTS=
+BADSPOTFILE=
 RUNTEST=false
 THREADS=
+INTERLEAVED=
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"  >/dev/null 2>&1 && pwd  )"
 ROOT=$(dirname $DIR)
 DB=$ROOT/data/human_filter.db
 
 #Get input
-while getopts ":i:o:d:p:hxrt" opts; do
+while getopts ":i:o:d:p:u:hxrts" opts; do
     case $opts in
         i) INFILE=${OPTARG}
             ;;
@@ -43,6 +48,10 @@ while getopts ":i:o:d:p:hxrt" opts; do
         x) REPLACEN="" # now default is on, this is to turn off
             ;;
         r) SAVEIDSPOTS="-r"
+            ;;
+        u) BADSPOTFILE=${OPTARG} && SAVEIDSPOTS="-r"
+            ;;
+        s) INTERLEAVED="-I"
             ;;
         t) RUNTEST=true
             ;;
@@ -85,17 +94,19 @@ if [ ! -e "${INFILE}" ];
     INFILE="$TMP_F_DIR/temp.fastq"
 fi
 #Use infile or temp fastq and generate fasta
-"$ROOT/scripts/fastq_to_fasta.py" < "${INFILE}" > "$TMP_F_DIR/temp.fasta"
+"$ROOT/scripts/fastq_to_fasta.py" ${INTERLEAVED} < "${INFILE}" > "$TMP_F_DIR/temp.fasta"
 
 if [ "$OUTFILE" ] && [ "$OUTFILE" != "-" ];
   then
-    "${ROOT}"/bin/aligns_to -db "${DB}" $(if [[ "$THREADS" =~ ^[0-9]+$ ]]; then printf "%s" "-num_threads $THREADS"; fi) "$TMP_F_DIR/temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN" "$SAVEIDSPOTS" > "$OUTFILE"
+    "${ROOT}"/bin/aligns_to -db "${DB}" $(if [[ "$THREADS" =~ ^[0-9]+$ ]]; then printf "%s" "-num_threads $THREADS"; fi) "$TMP_F_DIR/temp.fasta" \
+     | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN" "$SAVEIDSPOTS" "$BADSPOTFILE" > "$OUTFILE"
     if [ "$SAVEIDSPOTS" ] && [ -e "$TMP_F_DIR/temp.fastq.removed_spots" ];
       then
         cp "$TMP_F_DIR/temp.fastq.removed_spots" "$OUTFILE.removed_spots"
     fi
     else
-      "${ROOT}"/bin/aligns_to -db "${DB}" $(if [[ "$THREADS" =~ ^[0-9]+$ ]]; then printf "%s" "-num_threads $THREADS"; fi) "$TMP_F_DIR/temp.fasta" | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN"
+      "${ROOT}"/bin/aligns_to -db "${DB}" $(if [[ "$THREADS" =~ ^[0-9]+$ ]]; then printf "%s" "-num_threads $THREADS"; fi) "$TMP_F_DIR/temp.fasta" \
+      | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN" "$SAVEIDSPOTS" "$BADSPOTFILE"
 fi
 
 #Check if TESTING was successful

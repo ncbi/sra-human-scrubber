@@ -45,14 +45,21 @@ def main():
     f = open(sys.argv[1])
     save_removed = False
     n_replace = False
+    f_removed_spots = None
     if len(sys.argv) >= 3:
         if "-r" in sys.argv:
             save_removed = True
+            file_pos = sys.argv.index("-r") + 1
+            if len(sys.argv) > file_pos:
+                if sys.argv[file_pos]:
+                    f_removed_spots = sys.argv[file_pos]
+
         if "-n" in sys.argv:
             n_replace = True
-    f_removed_spots = None
+
     if save_removed:
-        f_removed_spots = sys.argv[1] + ".removed_spots"
+        if f_removed_spots is None:
+            f_removed_spots = sys.argv[1] + ".removed_spots"
 
     spots = load_spots()
     frs = None
