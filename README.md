@@ -81,7 +81,7 @@ OPTIONS:
 	-u <user_named_file>; Save identified spots to <user_named_file>.
 		NOTE: Required with -r if output is stdout, otherwise optional.
 	-t ; Run test.
-	-s ; Input is (collated) interleaved paired-end(read) file.
+	-s ; Input is (collated) interleaved paired-end(read) file AND you wish both reads masked or removed.
 	-h ; Display this message.
 
 ```

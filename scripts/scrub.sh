@@ -16,7 +16,7 @@ usage() {
     printf "\t-u <user_named_file>; Save identified spots to <user_named_file>.\n"
     printf "\t\tNOTE: Required with -r if output is stdout, otherwise optional.\n"
     printf "\t-t ; Run test.\n"
-    printf "\t-s ; Input is (collated) interleaved paired-end(read) file.\n"
+    printf "\t-s ; Input is (collated) interleaved paired-end(read) file AND you wish both reads masked or removed.\n"
     printf "\t-h ; Display this message.\n\n"
     exit 0;
 }
