@@ -1,6 +1,6 @@
 # Changelog
 ## [Unreleased]
-## [ 2.1.1 ] - 2023-07-18
+## [ 2.2.0 ] - 2023-07-18
 ### Added
 * New option (`-s`) for declaring interleaved (collated) paired-end file input. In this mode when a read is identified as human the pair mate will also be masked *whether or not it too is identified as human*. Without this flag an interleaved (collated) paired-end input file will only have identified reads masked.
 * New option (`-u`) for user-defined removed-spots file (in combination with `-r`).
