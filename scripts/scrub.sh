@@ -61,9 +61,9 @@ while getopts ":i:o:d:p:u:hxrts" opts; do
 done
 
 #Check for no args
-[ $# == 0 ] && usage
+[ "$#" == 0 ]  &&  [ -t 0 ]  && usage
 
-if [ ! -e "${INFILE}" ]  && [[ -e "${@:$#}" || "${@:$#}" == "test" ]];
+if [ ! -e "${INFILE}" ]  && [[ "${@:$#}" == "test" || -t 0 ]];
   then
     INFILE="${@:$#}"
 fi
