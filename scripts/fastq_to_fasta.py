@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import os
 
 
 def main():
@@ -22,7 +21,7 @@ def main():
             print(line.rstrip())
         elif internal_number == 2:
             if line[0] != '+':
-                raise line
+                raise Exception('File does not appear to be fastq or stdin is empty.')
 
         internal_number += 1
         if internal_number == 4:

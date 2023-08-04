@@ -99,14 +99,14 @@ fi
 if [ "$OUTFILE" ] && [ "$OUTFILE" != "-" ];
   then
     "${ROOT}"/bin/aligns_to -db "${DB}" $(if [[ "$THREADS" =~ ^[0-9]+$ ]]; then printf "%s" "-num_threads $THREADS"; fi) "$TMP_F_DIR/temp.fasta" \
-     | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN" "$SAVEIDSPOTS" "$BADSPOTFILE" > "$OUTFILE"
+     | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN" "$SAVEIDSPOTS" "$BADSPOTFILE"  ${INTERLEAVED} > "$OUTFILE"
     if [ "$SAVEIDSPOTS" ] && [ -e "$TMP_F_DIR/temp.fastq.removed_spots" ];
       then
         cp "$TMP_F_DIR/temp.fastq.removed_spots" "$OUTFILE.removed_spots"
     fi
     else
       "${ROOT}"/bin/aligns_to -db "${DB}" $(if [[ "$THREADS" =~ ^[0-9]+$ ]]; then printf "%s" "-num_threads $THREADS"; fi) "$TMP_F_DIR/temp.fasta" \
-      | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN" "$SAVEIDSPOTS" "$BADSPOTFILE"
+      | "$ROOT/scripts/cut_spots_fastq.py" "$INFILE" "$REPLACEN" "$SAVEIDSPOTS" "$BADSPOTFILE" ${INTERLEAVED}
 fi
 
 #Check if TESTING was successful
