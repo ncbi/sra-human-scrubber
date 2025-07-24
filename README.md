@@ -1,6 +1,6 @@
 ## ncbi::sra-human-scrubber 
 ### Description
-The human read removal tool (HRRT) is based on the [SRA Taxonomy Analysis Tool](https://doi.org/10.1186/s13059-021-02490-0) that will take as input a fastq file, and produce as output a fastq.clean file in which all reads identified as potentially of human origin are masked with 'N'.
+The human read removal tool (HRRT) is based on the [SRA Taxonomy Analysis Tool](https://pubmed.ncbi.nlm.nih.gov/34544477/) that will take as input a fastq file, and produce as output a fastq.clean file in which all reads identified as potentially of human origin are masked with 'N'.
 ### Overview
 Briefly, the HRRT employs a k-mer database constructed of k-mers from Eukaryota derived from all human RefSeq records and subtracts any k-mers found in non-Eukaryota RefSeq records. The remaining set of k-mers compose the database used to identify human reads by the removal tool. This means the tool tends to be aggressive about identifying human reads since it contains not only human-specific k-mers, but also k-mers common to primates and other taxa further up the Eukaryotic tree. However, it is also fairly conservative at retaining any viral or bacterial clinical pathogen sequences. It takes a fastq file as input, identifies any reads with hits to the 'human' k-mer database and outputs a fastq.clean with
 the identified human reads masked with 'N'.
